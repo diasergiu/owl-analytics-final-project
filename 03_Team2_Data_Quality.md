@@ -172,7 +172,7 @@ Team 2 is mainly about data quality. Your job is to take Dara's messy dataset, f
    Missing values after: 0
    Duplicate rows before: 213
    Duplicate rows after: 0
-   Cleaning decision: invalid rows were removed because they could distort the analytics.
+   Cleaning decision: invalid rows were removed because ...
    ```
 
 Save the cleaned dataset as:
@@ -243,10 +243,3 @@ This sample check is worth **3 marks**.
    ```
 
 2. Explain why pandas is useful for checking and cleaning, but not enough for final full-dataset analytics. **1 mark**
-
-   Example output:
-
-   ```txt
-   Pandas was useful for inspecting and cleaning the data.
-   The 50-row sample is not enough for final analytics because it does not represent the full cleaned dataset.
-   ```
