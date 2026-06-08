@@ -51,6 +51,7 @@ final_project/
 ├── part2_clean_with_pandas.ipynb
 ├── part3_spark_analytics.ipynb
 ├── scripts/
+│   ├── get_one_record.py
 │   └── mess_my_data.py
 ├── reports/
 │   ├── report_to_stelios.md

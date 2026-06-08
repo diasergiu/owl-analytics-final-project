@@ -48,45 +48,13 @@ Example request:
 https://data-api.binance.vision/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=1000
 ```
 
-Simple Python example to get one record and save it as a CSV:
+To test the API before building your full downloader, run:
 
-```python
-import csv
-import requests
-
-url = "https://data-api.binance.vision/api/v3/klines"
-params = {
-    "symbol": "BTCUSDT",
-    "interval": "1h",
-    "limit": 1,
-}
-
-response = requests.get(url, params=params)
-data = response.json()
-
-record = data[0]
-
-row = {
-    "symbol": "BTCUSDT",
-    "interval": "1h",
-    "open_time": record[0],
-    "open": record[1],
-    "high": record[2],
-    "low": record[3],
-    "close": record[4],
-    "volume": record[5],
-    "close_time": record[6],
-    "quote_volume": record[7],
-    "trade_count": record[8],
-}
-
-with open("one_record.csv", "w", newline="") as file:
-    writer = csv.DictWriter(file, fieldnames=row.keys())
-    writer.writeheader()
-    writer.writerow(row)
-
-print("Saved one_record.csv")
+```bash
+python scripts/get_one_record.py
 ```
+
+This script downloads one `BTCUSDT` record and saves it as `data/clean/one_record.csv`. Reuse the same API idea when you build `part1_build_dataset.py`.
 
 Useful documentation:
 
