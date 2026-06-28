@@ -30,30 +30,33 @@ def clear_csv_file():
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
 
-# writes contunuasly to file, 
 def save_data_to_csv(records , symbol: str, interval: str, lock):
+    with lock:
+        save_data_to_csv(records, symbol, interval)
+        
+# writes contunuasly to file, 
+def save_data_to_csv(records , symbol: str, interval: str):
     # Logger.Log(f"Saving data for {symbol} with interval {interval} to CSV")
     path.parent.mkdir(parents=True, exist_ok=True)
-    with lock:
-        with path.open("a", newline="") as file:
-            writer = csv.DictWriter(file, fieldnames=fieldnames)
-            if file.tell() == 0:
-                writer.writeheader()
-            for record in records:
-                row = {
-                    "symbol": symbol,
-                    "interval": interval,
-                    "open_time": record[0],
-                    "open": record[1],
-                    "high": record[2],
-                    "low": record[3],
-                    "close": record[4],
-                    "volume": record[5],
-                    "close_time": record[6],
-                    "quote_volume": record[7],
-                    "trade_count": record[8],
-                    "taker_buy_base_volume": record[9],
-                    "taker_buy_quote_volume": record[10],
-                }
-                writer.writerow(row)
+    with path.open("a", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        if file.tell() == 0:
+            writer.writeheader()
+        for record in records:
+            row = {
+                "symbol": symbol,
+                "interval": interval,
+                "open_time": record[0],
+                "open": record[1],
+                "high": record[2],
+                "low": record[3],
+                "close": record[4],
+                "volume": record[5],
+                "close_time": record[6],
+                "quote_volume": record[7],
+                "trade_count": record[8],
+                "taker_buy_base_volume": record[9],
+                "taker_buy_quote_volume": record[10],
+            }
+            writer.writerow(row)
     # Logger.log(f"Successfully saved data for {symbol} with interval {interval} to CSV")
