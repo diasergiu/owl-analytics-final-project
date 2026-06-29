@@ -1,7 +1,7 @@
 
 
 
-from Solution.part2_clearn_with_pandas import clean_string_into_datetime, clean_string_into_int, clean_symbol_column, correct_high_low, correct_non_negative, find_and_remove_duplicates, new_column_differance, new_column_percentage, print_data, load_data, set_dirrection
+from Solution.part2_clearn_with_pandas import clean_string_into_datetime, clean_string_into_int, clean_symbol_column, correct_high_low, correct_non_negative, find_and_remove_duplicates, new_column_differance, new_column_percentage, print_data, load_data, print_report, set_dirrection
 
 path_messy_data = "data/messy/messy_market_data.csv"
 
@@ -12,7 +12,7 @@ def main():
     # Part 3
     numericChanges = ["open", "high", "low", "close", "volume", "quote_volume", "trade_count"]
     for column in numericChanges:
-        clean_string_into_int(df, column)
+        df = clean_string_into_int(df, column)
     print("after cleaning the data")
     print_data(df)
 
@@ -38,7 +38,7 @@ def main():
     new_column_percentage(df, "price_change", "open", "percent_change")
     set_dirrection(df, "candle_direction")
 
-    print(df.head(50))
+    print_report()
 
 if __name__ == "__main__":
     main()

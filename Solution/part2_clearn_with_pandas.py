@@ -2,6 +2,8 @@ import pandas as pd
 
 from Solution.Logger import Logger
 
+report = ["Starting data cleaning process"]
+
 # part 1
 def load_data(file_path: str) -> pd.DataFrame:
     """Load data from a CSV file into a pandas DataFrame."""
@@ -41,7 +43,9 @@ def print_data(df: pd.DataFrame) -> pd.DataFrame:
 # part 3 I do not differantiate between int and float, I just convert all to float64
 def clean_string_into_int(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
     """Convert a string column to integer, handling errors. price, volume, and trade-count"""
+    report.append(f"transfotm {column_name} into float64, there are {df[column_name].isnull().sum()} missing values before transforming")
     df[column_name] = pd.to_numeric(df[column_name], errors="coerce").astype("float64")
+    report.append(f"transformed {column_name} into float64, there are {df[column_name].isnull().sum()} missing values after transforming")
     print(df[column_name].head(10))
     return df
 
@@ -51,29 +55,35 @@ def clean_string_into_datetime(df: pd.DataFrame, column_name: str) -> pd.DataFra
     """Convert a string column to datetime, handling errors."""
     df[column_name] = pd.to_numeric(df[column_name], errors="coerce").astype("Int64")
     df[column_name] = pd.to_datetime(df[column_name], unit='ms', utc=True)
+    report.append(f"cleaned {column_name} into datetime, there are {df[column_name].isnull().sum()} missing values")
     print("correction tadetime", df[column_name].head(50))
     return df
 
 def clean_symbol_column(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
     """Clean the symbol column by converting to uppercase."""
     df[column_name] = df[column_name].str.replace(r"[^A-Za-z0-9]", "", regex=True).str.upper()
+    # report how many rows have been chnaged
+
     print(df.head(50))
     return df
 
 # Part 5
 def find_and_remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
     """Find and remove duplicate rows in the DataFrame."""
-    print("Number of rows before removing duplicates:", df.shape[0])
-    print("Number of duplicate rows:", df.duplicated().sum())
+    report.append(f"Number of rows before removing duplicates: {df.shape[0]}")
+    report.append(f"Number of duplicate rows: {df.duplicated().sum()}")
     df = df.drop_duplicates()
-    print("Number of rows after removing duplicates:", df.shape[0])
+    report.append(f"Number of rows after removing duplicates: {df.shape[0]}")
     return df
 
 # part6
 def correct_non_negative(df: pd.DataFrame, numeric_columns: list) -> pd.DataFrame:
     """Correct numeric columns by converting negative values to zero."""
+    numberOfChnages = 0
     for column in numeric_columns:
+        numberOfChnages += (df[column] < 0).sum()
         df[column] = df[column].apply(lambda x: max(x, 0) if pd.notnull(x) else x)
+    report.append(f"Number of negative values corrected in columns {numeric_columns}: {numberOfChnages}")
     return df
 
 def correct_high_low(df: pd.DataFrame) -> pd.DataFrame:
@@ -107,3 +117,7 @@ def save_data_to_csv(df: pd.DataFrame, file_path: str):
     except Exception as e:
         Logger.log(f"Error saving data to {file_path}: {e}")
 
+# part 8
+def print_report():
+    """Print the report of the data cleaning process."""
+    print("\n".join(report))
